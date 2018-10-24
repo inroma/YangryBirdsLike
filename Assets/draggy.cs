@@ -44,8 +44,6 @@ public class draggy : MonoBehaviour
     public Color noForceColor = Color.yellow; // color of the visualization helpers at force 0
     public Color maxForceColor = Color.red; // color of the visualization helpers at maximum force
 
-    public GameObject powerParticle;
-
     public enum SnapDir { toward, away }
 
     private Vector3 forceVector;
@@ -112,9 +110,6 @@ public class draggy : MonoBehaviour
             dragZone.transform.rotation = Quaternion.LookRotation(dragPlaneNormal) * new Quaternion(1, 0, 0, 1);
         }
         else Debug.LogError("Drag plane normal cannot be equal to Vector3.zero.");
-
-        this.powerParticle.SetActive(true);
-        this.powerParticle.GetComponent<ParticleSystem>().
 
         //update the position of the dragzone
         dragZone.transform.position = transform.position;
@@ -183,8 +178,6 @@ public class draggy : MonoBehaviour
 
         }
 
-        this.powerParticle.SetActive(false);
-
         // add new force
         int snapD = 1;
         if (snapDirection == SnapDir.away) snapD = -1; // if snapdirection is "away" set the force to apply in the opposite direction
@@ -201,133 +194,133 @@ public class draggy : MonoBehaviour
 
     }
 
-    void OnGUI()
-    {
-        if (mouseDragging)
-        {
-            Vector2 guiMouseCoord = GUIUtility.ScreenToGUIPoint(Input.mousePosition);
-            GUI.Box(new Rect(guiMouseCoord.x - 30, Screen.height - guiMouseCoord.y + 15, 100, 20), "force: " + Mathf.Round((forceVector).magnitude));
-        }
-    }
+    //void OnGUI()
+    //{
+    //    if (mouseDragging)
+    //    {
+    //        Vector2 guiMouseCoord = GUIUtility.ScreenToGUIPoint(Input.mousePosition);
+    //        GUI.Box(new Rect(guiMouseCoord.x - 30, Screen.height - guiMouseCoord.y + 15, 100, 20), "force: " + Mathf.Round((forceVector).magnitude));
+    //    }
+    //}
 
-    Mesh MakeDiscMeshBrute(float r)
-    {
-        Mesh discMesh;
-        Vector3[] dmVerts = new Vector3[18];
-        Vector3[] dmNorms = new Vector3[18];
-        Vector2[] dmUVs = new Vector2[18];
-        int[] dmTris = new int[48];
-        int i = 0;
+    //Mesh MakeDiscMeshBrute(float r)
+    //{
+    //    Mesh discMesh;
+    //    Vector3[] dmVerts = new Vector3[18];
+    //    Vector3[] dmNorms = new Vector3[18];
+    //    Vector2[] dmUVs = new Vector2[18];
+    //    int[] dmTris = new int[48];
+    //    int i = 0;
 
-        discMesh = new Mesh();
+    //    discMesh = new Mesh();
 
-        dmVerts[0] = new Vector3(0, 0, 0);
-        dmVerts[1] = new Vector3(0, 0, r);
-        dmVerts[2] = new Vector3(1, 0, 1).normalized * r; // find the vector at the correct distance the hacky-hillbilly way!
-        dmVerts[3] = new Vector3(r, 0, 0);
-        dmVerts[4] = new Vector3(1, 0, -1).normalized * r;
-        dmVerts[5] = new Vector3(0, 0, -r);
-        dmVerts[6] = new Vector3(-1, 0, -1).normalized * r;
-        dmVerts[7] = new Vector3(-r, 0, 0);
-        dmVerts[8] = new Vector3(-1, 0, 1).normalized * r;
+    //    dmVerts[0] = new Vector3(0, 0, 0);
+    //    dmVerts[1] = new Vector3(0, 0, r);
+    //    dmVerts[2] = new Vector3(1, 0, 1).normalized * r; // find the vector at the correct distance the hacky-hillbilly way!
+    //    dmVerts[3] = new Vector3(r, 0, 0);
+    //    dmVerts[4] = new Vector3(1, 0, -1).normalized * r;
+    //    dmVerts[5] = new Vector3(0, 0, -r);
+    //    dmVerts[6] = new Vector3(-1, 0, -1).normalized * r;
+    //    dmVerts[7] = new Vector3(-r, 0, 0);
+    //    dmVerts[8] = new Vector3(-1, 0, 1).normalized * r;
 
-        // set the other side to the same points
-        for (i = 0; i < dmVerts.Length / 2; i++)
-        {
-            dmVerts[dmVerts.Length / 2 + i] = dmVerts[i];
-        }
-        for (i = 0; i < dmNorms.Length; i++)
-        {
-            if (i < dmNorms.Length / 2) dmNorms[i] = Vector3.up; // set side one to face up
-            else dmNorms[i] = -Vector3.up; // set side two to face down
-        }
+    //    // set the other side to the same points
+    //    for (i = 0; i < dmVerts.Length / 2; i++)
+    //    {
+    //        dmVerts[dmVerts.Length / 2 + i] = dmVerts[i];
+    //    }
+    //    for (i = 0; i < dmNorms.Length; i++)
+    //    {
+    //        if (i < dmNorms.Length / 2) dmNorms[i] = Vector3.up; // set side one to face up
+    //        else dmNorms[i] = -Vector3.up; // set side two to face down
+    //    }
 
-        dmUVs[0] = new Vector2(0, 0);
-        dmUVs[1] = new Vector2(0, r);
-        dmUVs[2] = new Vector2(1, 1).normalized * r; ;
-        dmUVs[3] = new Vector2(r, 0);
-        dmUVs[4] = new Vector2(1, -1).normalized * r; ;
-        dmUVs[5] = new Vector2(0, -r);
-        dmUVs[6] = new Vector2(-1, -1).normalized * r; ;
-        dmUVs[7] = new Vector2(-r, 0);
-        dmUVs[8] = new Vector2(-1, 1).normalized * r; ;
+    //    dmUVs[0] = new Vector2(0, 0);
+    //    dmUVs[1] = new Vector2(0, r);
+    //    dmUVs[2] = new Vector2(1, 1).normalized * r; ;
+    //    dmUVs[3] = new Vector2(r, 0);
+    //    dmUVs[4] = new Vector2(1, -1).normalized * r; ;
+    //    dmUVs[5] = new Vector2(0, -r);
+    //    dmUVs[6] = new Vector2(-1, -1).normalized * r; ;
+    //    dmUVs[7] = new Vector2(-r, 0);
+    //    dmUVs[8] = new Vector2(-1, 1).normalized * r; ;
 
-        // set the other side to the same points
-        for (i = 0; i < dmUVs.Length / 2; i++)
-        {
-            dmUVs[dmUVs.Length / 2 + i] = dmUVs[i];
-        }
+    //    // set the other side to the same points
+    //    for (i = 0; i < dmUVs.Length / 2; i++)
+    //    {
+    //        dmUVs[dmUVs.Length / 2 + i] = dmUVs[i];
+    //    }
 
-        dmTris[0] = 0;
-        dmTris[1] = 1;
-        dmTris[2] = 2;
+    //    dmTris[0] = 0;
+    //    dmTris[1] = 1;
+    //    dmTris[2] = 2;
 
-        dmTris[3] = 0;
-        dmTris[4] = 2;
-        dmTris[5] = 3;
+    //    dmTris[3] = 0;
+    //    dmTris[4] = 2;
+    //    dmTris[5] = 3;
 
-        dmTris[6] = 0;
-        dmTris[7] = 3;
-        dmTris[8] = 4;
+    //    dmTris[6] = 0;
+    //    dmTris[7] = 3;
+    //    dmTris[8] = 4;
 
-        dmTris[9] = 0;
-        dmTris[10] = 4;
-        dmTris[11] = 5;
+    //    dmTris[9] = 0;
+    //    dmTris[10] = 4;
+    //    dmTris[11] = 5;
 
-        dmTris[12] = 0;
-        dmTris[13] = 5;
-        dmTris[14] = 6;
+    //    dmTris[12] = 0;
+    //    dmTris[13] = 5;
+    //    dmTris[14] = 6;
 
-        dmTris[15] = 0;
-        dmTris[16] = 6;
-        dmTris[17] = 7;
+    //    dmTris[15] = 0;
+    //    dmTris[16] = 6;
+    //    dmTris[17] = 7;
 
-        dmTris[18] = 0;
-        dmTris[19] = 7;
-        dmTris[20] = 8;
+    //    dmTris[18] = 0;
+    //    dmTris[19] = 7;
+    //    dmTris[20] = 8;
 
-        dmTris[21] = 0;
-        dmTris[22] = 8;
-        dmTris[23] = 1;
+    //    dmTris[21] = 0;
+    //    dmTris[22] = 8;
+    //    dmTris[23] = 1;
 
-        // side two
-        dmTris[24] = 9;
-        dmTris[25] = 11;
-        dmTris[26] = 10;
+    //    // side two
+    //    dmTris[24] = 9;
+    //    dmTris[25] = 11;
+    //    dmTris[26] = 10;
 
-        dmTris[27] = 9;
-        dmTris[28] = 12;
-        dmTris[29] = 11;
+    //    dmTris[27] = 9;
+    //    dmTris[28] = 12;
+    //    dmTris[29] = 11;
 
-        dmTris[30] = 9;
-        dmTris[31] = 13;
-        dmTris[32] = 12;
+    //    dmTris[30] = 9;
+    //    dmTris[31] = 13;
+    //    dmTris[32] = 12;
 
-        dmTris[33] = 9;
-        dmTris[34] = 14;
-        dmTris[35] = 13;
+    //    dmTris[33] = 9;
+    //    dmTris[34] = 14;
+    //    dmTris[35] = 13;
 
-        dmTris[36] = 9;
-        dmTris[37] = 15;
-        dmTris[38] = 14;
+    //    dmTris[36] = 9;
+    //    dmTris[37] = 15;
+    //    dmTris[38] = 14;
 
-        dmTris[39] = 9;
-        dmTris[40] = 16;
-        dmTris[41] = 15;
+    //    dmTris[39] = 9;
+    //    dmTris[40] = 16;
+    //    dmTris[41] = 15;
 
-        dmTris[42] = 9;
-        dmTris[43] = 17;
-        dmTris[44] = 16;
+    //    dmTris[42] = 9;
+    //    dmTris[43] = 17;
+    //    dmTris[44] = 16;
 
-        dmTris[45] = 9;
-        dmTris[46] = 10;
-        dmTris[47] = 17;
+    //    dmTris[45] = 9;
+    //    dmTris[46] = 10;
+    //    dmTris[47] = 17;
 
-        discMesh.vertices = dmVerts;
-        discMesh.uv = dmUVs;
-        discMesh.normals = dmNorms;
-        discMesh.triangles = dmTris;
+    //    discMesh.vertices = dmVerts;
+    //    discMesh.uv = dmUVs;
+    //    discMesh.normals = dmNorms;
+    //    discMesh.triangles = dmTris;
 
-        return discMesh;
-    }
+    //    return discMesh;
+    //}
 }
