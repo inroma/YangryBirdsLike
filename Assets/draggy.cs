@@ -9,7 +9,7 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
 
-public class draggy : MonoBehaviour
+public class Draggy : MonoBehaviour
 {
 
     /*
@@ -39,7 +39,7 @@ public class draggy : MonoBehaviour
     public ForceMode forceTypeToApply = ForceMode.VelocityChange;
 
     public bool overrideVelocity = true; // cancel the existing velocity before applying the new force
-    public bool pauseOnDrag = true; // causes the simulation to pause when the object is clicked and unpause when released
+    public bool pauseOnDrag = false; // causes the simulation to pause when the object is clicked and unpause when released
 
     public Color noForceColor = Color.yellow; // color of the visualization helpers at force 0
     public Color maxForceColor = Color.red; // color of the visualization helpers at maximum force
@@ -88,6 +88,7 @@ public class draggy : MonoBehaviour
 
         //update the position of the dragzone
         dragZone.transform.position = transform.position;
+        
     }
 
     void OnMouseDown()
@@ -103,7 +104,7 @@ public class draggy : MonoBehaviour
         }
         // update the dragplane
         dragPlane = new Plane(dragPlaneNormal, transform.position);
-
+        
         // orient the drag plane
         if (dragPlaneNormal != Vector3.zero)
         {
@@ -115,6 +116,7 @@ public class draggy : MonoBehaviour
         dragZone.transform.position = transform.position;
 
         dragZone.GetComponent<Renderer>().enabled = true;
+
     }
 
 
@@ -191,7 +193,6 @@ public class draggy : MonoBehaviour
             // un-pause the simulation
             Time.timeScale = 1;
         }
-
     }
 
     //void OnGUI()
