@@ -5,27 +5,28 @@ using UnityEngine;
 public class AutomaticChangeBall : MonoBehaviour {
 
     public List<GameObject> listBalls;
-    private GameObject currentBall;
+    public GameObject currentBall;
 
     // Use this for initialization
     void Start()
     {
-        currentBall = this.GetComponentInChildren<GameObject>();
         StartCoroutine(ChangeBall());
     }
 	
 	// Update is called once per frame
 	void Update () {
-        currentBall = this.GetComponentInChildren<GameObject>();
+
     }
 
     IEnumerator ChangeBall()
     {
-        foreach (GameObject ball in listBalls)
-        {
-            currentBall.SetActive(false);
-            ball.SetActive(true);
-            yield return new WaitForSeconds(3);
-        }
+        while(true)
+            for (int i = 0; i < listBalls.Capacity; i++)
+            {
+                currentBall.SetActive(false);
+                listBalls[i].SetActive(true);
+                currentBall = listBalls[i];
+                yield return new WaitForSeconds(5.0f);
+            }
     }
 }
