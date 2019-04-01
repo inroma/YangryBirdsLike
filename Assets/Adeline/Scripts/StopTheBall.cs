@@ -22,7 +22,6 @@ public class StopTheBall : MonoBehaviour {
 
     private void StopBall()
     {
-        Debug.Log("test");
         selectionBall.GetComponent<SelectionBallScript>().SelectedBall.StopTheBall();
         
     }

@@ -5,10 +5,11 @@ using UnityEngine;
 public class SelectionBallScript : MonoBehaviour {
 
     public Ball SelectedBall;
-    public GameObject balls;
+    private GameObject balls;
     // Use this for initialization
     void Start () {
-
+       
+        balls = GameObject.Find("Balls");
         SelectedBall = balls.transform.GetChild(0).gameObject.GetComponent<Ball>();
         this.gameObject.SetActive(true);
 	}
@@ -31,26 +32,26 @@ public class SelectionBallScript : MonoBehaviour {
 
     public void SelectNextBall()
     {
-        if (BallsInventory.GetInventoryBalls().IndexOf(SelectedBall) < BallsInventory.GetInventoryBalls().Count-1)
+        if (BallsInventory.GetSelectedBalls().IndexOf(SelectedBall) < BallsInventory.GetSelectedBalls().Count-1)
         {
-            SelectedBall = (Ball)BallsInventory.GetInventoryBalls()[BallsInventory.GetInventoryBalls().IndexOf(SelectedBall) + 1];
+            SelectedBall = (Ball)BallsInventory.GetSelectedBalls()[BallsInventory.GetSelectedBalls().IndexOf(SelectedBall) + 1];
         }
         else
         {
-            SelectedBall = (Ball)BallsInventory.GetInventoryBalls()[0];
+            SelectedBall = (Ball)BallsInventory.GetSelectedBalls()[0];
         }
 
     }
 
     public void SelectPreviousBall()
     {
-        if (BallsInventory.GetInventoryBalls().IndexOf(SelectedBall) > 0)
+        if (BallsInventory.GetSelectedBalls().IndexOf(SelectedBall) > 0)
         {
-            SelectedBall = (Ball)BallsInventory.GetInventoryBalls()[BallsInventory.GetInventoryBalls().IndexOf(SelectedBall) - 1];
+            SelectedBall = (Ball)BallsInventory.GetSelectedBalls()[BallsInventory.GetSelectedBalls().IndexOf(SelectedBall) - 1];
         }
         else
         {
-            SelectedBall = (Ball)BallsInventory.GetInventoryBalls()[BallsInventory.GetInventoryBalls().Count-1];
+            SelectedBall = (Ball)BallsInventory.GetSelectedBalls()[BallsInventory.GetSelectedBalls().Count-1];
         }
 
     }

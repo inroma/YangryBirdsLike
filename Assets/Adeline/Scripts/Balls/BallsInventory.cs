@@ -5,27 +5,42 @@ using UnityEngine;
 public static class BallsInventory 
 {
 
-    static ArrayList MyBalls = new ArrayList();
+    static ArrayList EnableBalls = new ArrayList();
     static ArrayList MarketPlaceBalls = new ArrayList();
+    static ArrayList SelectedBalls = new ArrayList(); 
 
-    public static void AddBall(Ball ball)
+    public static void AddEnableBall(Ball ball)
     {
-        MyBalls.Add(ball);
+        EnableBalls.Add(ball);
     }
 
-    public static void RemoveBall(Ball ball)
+    public static void RemoveEnableBall(Ball ball)
     {
-        MyBalls.Remove(ball);
+        EnableBalls.Remove(ball);
     }
 
     public static ArrayList GetInventoryBalls()
     {
-        return MyBalls;
+        return EnableBalls;
     }
 
     public static ArrayList GetMarketPlaceBalls()
     {
         return MarketPlaceBalls;
+    }
+
+    public static void AddBallToSelected(Ball ball)
+    {
+        SelectedBalls.Add(ball);
+    }
+
+    public static void RemoveBallToSelected(Ball ball)
+    {
+        SelectedBalls.Remove(ball);
+    }
+    public static ArrayList GetSelectedBalls()
+    {
+        return SelectedBalls;
     }
 
 }

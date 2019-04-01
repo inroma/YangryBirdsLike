@@ -7,10 +7,32 @@ public class Ball : MonoBehaviour {
 
     public float smoothTime = 0.3F;
     public Vector3 velocity = Vector3.zero;
+    public int price;
+    public bool isUnlock;
+    public bool isSelected;
+
     // Use this for initialization
     void Start () {
-		
-	}
+        isUnlock = false;
+        if (PlayerPrefs.GetInt(this.name + "isunlock") == 1)
+        {
+            this.isUnlock = true;
+        }
+        else
+        {
+            this.isUnlock = false;
+        }
+
+        if (PlayerPrefs.GetInt(this.name) == 1)
+        {
+            this.isSelected = true;
+        }
+        else
+        {
+            this.isSelected = false;
+        }
+
+    }
 
     public void StopTheBall()
     {
@@ -38,11 +60,11 @@ public class Ball : MonoBehaviour {
 
     public void Equip()
     {
-        BallsInventory.AddBall(this);
+        BallsInventory.AddBallToSelected(this);
     }
     public void UnEquip()
     {
-        BallsInventory.RemoveBall(this);
+        BallsInventory.RemoveBallToSelected(this);
     }
 
 

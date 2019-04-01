@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,26 +9,36 @@ public class MarketPlaceScript : MonoBehaviour {
 
     private Ball actualBall;
     private GameObject cubeScene;
+    public GameObject locker;
     public GameObject balls;
-    public GameObject equipButton;
-    public GameObject unequipButton;
-    // Use this for initialization
+    public GameObject buyBallButton;
+    public ModalPanel modalPanel;
+    private int diamonds;
+    public TextMeshProUGUI diamonds_text;
+
     void Start () {
 
         cubeScene = GameObject.Find("CubeRoom");
+        this.modalPanel.gameObject.SetActive(false);
+
         for (int i = 0; i < balls.transform.childCount; i++)
         {
             BallsInventory.GetMarketPlaceBalls().Add(balls.transform.GetChild(i).gameObject.GetComponent<Ball>());
         }
+
         foreach ( Ball ball in BallsInventory.GetMarketPlaceBalls())
         {
             ball.gameObject.SetActive(false);
-            PlayerPrefs.SetInt(ball.gameObject.name, 0);
         }
 
         actualBall =(Ball)BallsInventory.GetMarketPlaceBalls()[0];
         actualBall.transform.position = GameObject.Find("ActualBall").transform.position;
         actualBall.gameObject.SetActive(true);
+        this.modalPanel.gameObject.SetActive(false);
+        diamonds = PlayerPrefs.GetInt("diamonds");
+        diamonds = this.diamonds + 1;
+        this.diamonds_text.text = diamonds.ToString();
+
     }
 	
 	// Update is called once per frame
@@ -37,63 +48,25 @@ public class MarketPlaceScript : MonoBehaviour {
         cubeScene.transform.Rotate(Vector3.up * Time.deltaTime * 2);
         actualBall.transform.Rotate(Vector3.up * Time.deltaTime * 40);
 
+
         if (!actualBall.gameObject.activeInHierarchy)
             actualBall.gameObject.SetActive(true);
 
-        if (BallsInventory.GetInventoryBalls().Count == 3 ) 
+        if( actualBall.isUnlock == false)
         {
-            DisableEquipButton();
-            if (BallsInventory.GetInventoryBalls().Contains(actualBall))
-            {
-                EnableUnEquipButton();
-            }
-            else
-            {
-                DisableUnEquipButton();
-            }
+            locker.gameObject.SetActive(true);
+            buyBallButton.gameObject.SetActive(true);
+            
         }
-        else if (BallsInventory.GetInventoryBalls().Contains(actualBall))
+        else
         {
-            DisableEquipButton();
-            EnableUnEquipButton();
-        }
-        else 
-        {
-            EnableEquipButton();
-            DisableUnEquipButton();
+            locker.gameObject.SetActive(false);
+            buyBallButton.gameObject.SetActive(false);
         }
 
     }
 
-    public void DisableEquipButton()
-    {
-        equipButton.SetActive(false);
-    }
-    public void EnableEquipButton()
-    {
-        equipButton.SetActive(true);
-    }
-    public void EnableUnEquipButton()
-    {
-        unequipButton.SetActive(true);
-    }
-    public void DisableUnEquipButton()
-    {
-        unequipButton.SetActive(false);
-    }
-    public void Equip()
-    {
-        actualBall.Equip();
-        PlayerPrefs.SetInt(actualBall.gameObject.name, 1);
-    }
-
-    public void UnEquip()
-    {
-
-        PlayerPrefs.SetInt(actualBall.gameObject.name, 0);
-        actualBall.UnEquip();
-    }
-
+ 
     public void PreviousBall()
     {
         actualBall.gameObject.SetActive(false);
@@ -123,11 +96,31 @@ public class MarketPlaceScript : MonoBehaviour {
         actualBall.transform.position = GameObject.Find("ActualBall").transform.position;
     }
 
-    public  void PlayGame()
+    public void BuyBall()
     {
-        PlayerPrefs.SetInt("BallSelected", BallsInventory.GetInventoryBalls().IndexOf(actualBall));
-        SceneManager.LoadScene("Cameramvt");
+        if(this.diamonds - this.actualBall.price >= 0)
+        {
+            modalPanel.gameObject.SetActive(true);
+            this.diamonds = this.diamonds - this.actualBall.price;
+            PlayerPrefs.SetInt("diamonds", diamonds);
+            modalPanel.infotext.text = " Achat terminé ! Il vous reste "+ diamonds + " diamants";
+            this.actualBall.isUnlock = true;
+            PlayerPrefs.SetInt(this.actualBall.gameObject.name + "isunlock" , 1);
+            this.diamonds_text.text = diamonds.ToString();
+        }
+        else
+        {
+            modalPanel.gameObject.SetActive(true);
+            modalPanel.infotext.text = " On fait pas de la charité ici ! Transaction refusée.";
+        }    
     }
+
+
+
+    //public  void PlayGame()
+    //{
+    //    SceneManager.LoadScene("Cameramvt");
+    //}
 
 
 
